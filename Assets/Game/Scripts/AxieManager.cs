@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class AxieManager : MonoBehaviour
 {
@@ -13,16 +15,16 @@ public class AxieManager : MonoBehaviour
     const bool USE_GRAPHIC = false;
     bool isFetchingGenes = false;
     public Transform[] Slot;
-    [SerializeField] SkeletonAnimation[] Axies;
-    
+    public Text[] AxieInput;
+    public string[] AxieSaveID; 
     int currentslot = 0;
     // Start is called before the first frame update
     void Start()
     {
-        Axies = new SkeletonAnimation[Slot.Length];
+        
         Mixer.Init();
         List<string> animationList = builder.axieMixerMaterials.GetMixerStuff(AxieFormType.Normal).GetAnimatioNames();
-        OnMixButtonClicked();
+        GetAxieOnStart();
     }
 
     // Update is called once per frame
@@ -30,25 +32,41 @@ public class AxieManager : MonoBehaviour
     {
         
     }
-
-    public void OnMixButtonClicked()
+    public void ChangeScene(string nameScene)
+    {
+        SceneManager.LoadScene(nameScene);
+    }
+    public void GetAxieOnStart()
+    {
+        int i = 0;
+        foreach (string axieid in AxieSaveID)
+        {
+            AxieSaveID[i] = PlayerPrefs.GetString($"Axie{i}");
+            if(AxieSaveID[i]=="")
+            {
+                AxieSaveID[i]= (222+i*111).ToString();
+                StartCoroutine(GetAxiesGenes(AxieSaveID[i]));
+            }
+            else StartCoroutine(GetAxiesGenes(AxieSaveID[i]));
+            i++;
+        }
+    }
+    public void OnMixButtonClicked(int id)
     {
 
         if (isFetchingGenes) return;
-        ClearAll();
-        currentslot = 0;
-        foreach (var p in Slot)
-        {
-            string axieid = Random.Range(1, 2000).ToString();
-            Debug.Log(axieid);
-            StartCoroutine(GetAxiesGenes(axieid));
-           
-        }
+
+        currentslot = id;
+        StartCoroutine(GetAxiesGenes(AxieInput[id].text));
+        Debug.Log(AxieInput[id].text);
+        PlayerPrefs.SetString($"Axie{id}", AxieInput[id].text);
+        
         
     }
 
     public IEnumerator GetAxiesGenes(string axieId)
     {
+        Debug.Log("Ok");
         isFetchingGenes = true;
         string searchString = "{ axie (axieId: \"" + axieId + "\") { id, genes, newGenes}}";
         JObject jPayload = new JObject();
@@ -74,6 +92,7 @@ public class AxieManager : MonoBehaviour
             }
         }
         isFetchingGenes = false;
+        
     }
     void ProcessMixer(string axieId, string genesStr, bool isGraphic)
     {
@@ -105,16 +124,10 @@ public class AxieManager : MonoBehaviour
         SkeletonAnimation runtimeSkeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(builderResult.skeletonDataAsset);
        
         runtimeSkeletonAnimation.transform.SetParent(Slot[currentslot].transform, false);
-        if(currentslot>5)
-        {
-            runtimeSkeletonAnimation.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); 
-        }
-        else runtimeSkeletonAnimation.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
-
-
+        runtimeSkeletonAnimation.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f); 
         runtimeSkeletonAnimation.gameObject.AddComponent<AutoBlendAnimController>();
         runtimeSkeletonAnimation.state.SetAnimation(0, "action/idle/normal", true);
-
+        runtimeSkeletonAnimation.tag=currentslot.ToString();
         if (builderResult.adultCombo.ContainsKey("body") &&
             builderResult.adultCombo["body"].Contains("mystic") &&
             builderResult.adultCombo.TryGetValue("body-class", out var bodyClass) &&
@@ -124,7 +137,7 @@ public class AxieManager : MonoBehaviour
         }
         runtimeSkeletonAnimation.skeleton.FindSlot("shadow").Attachment = null;
         runtimeSkeletonAnimation.loop=true;
-        Axies[currentslot] = runtimeSkeletonAnimation; 
+
         currentslot++;
     }
     void ClearAll()
@@ -134,17 +147,10 @@ public class AxieManager : MonoBehaviour
         {
             if (p.tag == $"{currentslot}")
             {
-                Destroy(p.transform.parent.gameObject);
+                Destroy(p.gameObject);
             }
         }
-        var skeletonGraphics = FindObjectsOfType<SkeletonGraphic>();
-        foreach (var p in skeletonGraphics)
-        {
-            if (p.tag == $"{currentslot}")
-            {
-                Destroy(p.transform.parent.gameObject);
-            }
-        }
+        
        
     }
 }
