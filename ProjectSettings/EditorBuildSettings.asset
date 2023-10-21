@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/_Scenes/FlappyAxie.unity
     guid: 3e62be8942ba54570a24aa9cc83af773
   - enabled: 1
-    path: Assets/_Scenes/Game.unity
+    path: Assets/Game/Game.unity
     guid: 087ac62521d54df4cb84389f2cccc6e0
   m_configObjects: {}
