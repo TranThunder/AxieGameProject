@@ -25,9 +25,11 @@ public class AxieManager : MonoBehaviour
         Mixer.Init();
         List<string> animationList = builder.axieMixerMaterials.GetMixerStuff(AxieFormType.Normal).GetAnimatioNames();
         GetAxieOnStart();
+        
     }
 
     // Update is called once per frame
+    
     void Update()
     {
         
@@ -41,6 +43,7 @@ public class AxieManager : MonoBehaviour
         int i = 0;
         foreach (string axieid in AxieSaveID)
         {
+            
             AxieSaveID[i] = PlayerPrefs.GetString($"Axie{i}");
             if(AxieSaveID[i]=="")
             {
@@ -57,9 +60,11 @@ public class AxieManager : MonoBehaviour
         if (isFetchingGenes) return;
 
         currentslot = id;
-        StartCoroutine(GetAxiesGenes(AxieInput[id].text));
-        Debug.Log(AxieInput[id].text);
         PlayerPrefs.SetString($"Axie{id}", AxieInput[id].text);
+        AxieSaveID[id] = AxieInput[id].text;
+        StartCoroutine(GetAxiesGenes(AxieInput[id].text));
+        
+       
         
         
     }
@@ -96,6 +101,7 @@ public class AxieManager : MonoBehaviour
     }
     void ProcessMixer(string axieId, string genesStr, bool isGraphic)
     {
+        int i = 0;
         if (string.IsNullOrEmpty(genesStr))
         {
             Debug.LogError($"[{axieId}] genes not found!!!");
@@ -110,6 +116,14 @@ public class AxieManager : MonoBehaviour
         //{
         //    meta.Add(accessorySlot, $"{accessorySlot}1{System.Char.ConvertFromUtf32((int)('a') + accessoryIdx - 1)}");
         //}
+        foreach (string axieid in AxieSaveID)
+        {
+            if (axieid ==axieId)
+            {
+                currentslot = i;
+            }
+            else i++;
+        }
         var builderResult = builder.BuildSpineFromGene(axieId, genesStr, meta, scale, isGraphic);
     
             SpawnSkeletonAnimation(builderResult);
@@ -122,7 +136,7 @@ public class AxieManager : MonoBehaviour
         
         
         SkeletonAnimation runtimeSkeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(builderResult.skeletonDataAsset);
-       
+        
         runtimeSkeletonAnimation.transform.SetParent(Slot[currentslot].transform, false);
         runtimeSkeletonAnimation.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f); 
         runtimeSkeletonAnimation.gameObject.AddComponent<AutoBlendAnimController>();
@@ -138,7 +152,7 @@ public class AxieManager : MonoBehaviour
         runtimeSkeletonAnimation.skeleton.FindSlot("shadow").Attachment = null;
         runtimeSkeletonAnimation.loop=true;
 
-        currentslot++;
+       
     }
     void ClearAll()
     {
