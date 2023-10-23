@@ -144,7 +144,7 @@ public class AxieManager : MonoBehaviour
         runtimeSkeletonAnimation.gameObject.AddComponent<AxieStats>();
         AxieStats axieStats=runtimeSkeletonAnimation.gameObject.GetComponent<AxieStats>();
         axieStats.Stats(GetStats(currentslot));
-      
+        
         runtimeSkeletonAnimation.state.SetAnimation(0, "action/idle/normal", true);
         runtimeSkeletonAnimation.tag=currentslot.ToString();
         if (builderResult.adultCombo.ContainsKey("body") &&
