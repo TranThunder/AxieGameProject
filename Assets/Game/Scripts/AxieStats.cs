@@ -9,16 +9,23 @@ public class AxieStats : MonoBehaviour
     public float atk;
     public float def;
     public float crit;
+    public bool isatk=true;
+    Vector2 pos;
     // Start is called before the first frame update
     void Start()
     {
-        
+        pos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isatk)
+        {
+            transform.position = Vector2.Lerp(pos, pos + new Vector2(3.1f, 0), 0.1f) * Time.deltaTime;
+        }
         
+
     }
     public void Stats(int lv)
     {
