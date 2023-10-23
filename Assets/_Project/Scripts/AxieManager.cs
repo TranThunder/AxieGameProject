@@ -11,13 +11,13 @@ using UnityEngine.UI;
 public class AxieManager : MonoBehaviour
 {
     Axie2dBuilder builder => Mixer.Builder;
-
     const bool USE_GRAPHIC = false;
     bool isFetchingGenes = false;
     public Transform[] Slot;
     public Text[] AxieInput;
     public string[] AxieSaveID; 
     int currentslot = 0;
+    int slp;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +25,7 @@ public class AxieManager : MonoBehaviour
         Mixer.Init();
         List<string> animationList = builder.axieMixerMaterials.GetMixerStuff(AxieFormType.Normal).GetAnimatioNames();
         GetAxieOnStart();
-        
+        slp = PlayerPrefs.GetInt("Slp");
     }
 
     // Update is called once per frame
@@ -121,6 +121,7 @@ public class AxieManager : MonoBehaviour
             if (axieid ==axieId)
             {
                 currentslot = i;
+
             }
             else i++;
         }
@@ -140,6 +141,10 @@ public class AxieManager : MonoBehaviour
         runtimeSkeletonAnimation.transform.SetParent(Slot[currentslot].transform, false);
         runtimeSkeletonAnimation.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f); 
         runtimeSkeletonAnimation.gameObject.AddComponent<AutoBlendAnimController>();
+        runtimeSkeletonAnimation.gameObject.AddComponent<AxieStats>();
+        AxieStats axieStats=runtimeSkeletonAnimation.gameObject.GetComponent<AxieStats>();
+        axieStats.Stats(GetStats(currentslot));
+      
         runtimeSkeletonAnimation.state.SetAnimation(0, "action/idle/normal", true);
         runtimeSkeletonAnimation.tag=currentslot.ToString();
         if (builderResult.adultCombo.ContainsKey("body") &&
@@ -167,4 +172,26 @@ public class AxieManager : MonoBehaviour
         
        
     }
+    public int GetStats(int axieslot)
+    {
+        int axieLevel =PlayerPrefs.GetInt($"Axie{axieslot}slot");
+        
+        if(axieLevel==0)
+        {
+            axieLevel = 1;
+            PlayerPrefs.SetInt($"Axie{axieslot}slot", axieLevel + 1);
+        }
+        
+        return axieLevel;
+    }
+    public void UpgradeStats(int axieslot)
+    {
+        int axieLevel = PlayerPrefs.GetInt($"Axie{axieslot}slot");
+        PlayerPrefs.SetInt($"Axie{axieslot}slot", axieLevel + 1);
+        /// update so slp sau
+        PlayerPrefs.SetInt("Slp", slp - 100);
+        //de update stat trong upgrad them array hay list axiestats xong add 3 con axie vao
+        
+    }
+   
 }

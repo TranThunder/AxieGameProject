@@ -9,6 +9,7 @@ public class TurnManager : MonoBehaviour
     int EnemyTurn = 0;
     [SerializeField] float AttackMoveDistance;
     AxieManager axieManager;
+    Vector3 distance = new Vector3(3.1f,0,0);
     void Start()
     {
         axieManager = GetComponent<AxieManager>();
@@ -24,7 +25,7 @@ public class TurnManager : MonoBehaviour
     {
         if (TeamTurn == EnemyTurn)
         {
-            axieManager.Slot[TeamTurn].position += new Vector3(3.1f, 0, 0);
+            axieManager.Slot[TeamTurn].position = Vector3.MoveTowards(axieManager.Slot[TeamTurn].position, axieManager.Slot[TeamTurn].position + distance, 1);
             TeamTurn++;
 
         }
