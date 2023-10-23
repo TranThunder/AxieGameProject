@@ -24,7 +24,7 @@ namespace Game
 
         Axie2dBuilder builder => Mixer.Builder;
 
-        const bool USE_GRAPHIC = false;
+        const bool USE_GRAPHIC = true;
         int accessoryIdx = 1;
 
         static string[] ACCESSORY_SLOTS = new[]
@@ -221,7 +221,6 @@ namespace Game
                 {
                     runtimeSkeletonAnimation.gameObject.AddComponent<MysticIdController>().Init(bodyClass, bodyId);
                 }
-                Debug.Log("3");
             }
             Debug.Log("Done");
         }
@@ -391,7 +390,7 @@ namespace Game
             GameObject go = new GameObject("DemoAxie");
             go.transform.localPosition = new Vector3(0f, -2.4f, 0f);
             SkeletonAnimation runtimeSkeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(builderResult.skeletonDataAsset);
-            
+            runtimeSkeletonAnimation.gameObject.layer = LayerMask.NameToLayer("Player");
             runtimeSkeletonAnimation.transform.SetParent(go.transform, false);
             runtimeSkeletonAnimation.transform.localScale = Vector3.one;
 
@@ -406,7 +405,6 @@ namespace Game
                 runtimeSkeletonAnimation.gameObject.AddComponent<MysticIdController>().Init(bodyClass, bodyId);
             }
             runtimeSkeletonAnimation.skeleton.FindSlot("shadow").Attachment = null;
-            Debug.Log("2");
         }
 
         void SpawnSkeletonGraphic(Axie2dBuilderResult builderResult)
@@ -431,9 +429,7 @@ namespace Game
             {
                 skeletonGraphic.gameObject.AddComponent<MysticIdGraphicController>().Init(bodyClass, bodyId);
             }
-            Debug.Log("1");
         }
-        
 
         bool isFetchingGenes = false;
         public void OnMixButtonClicked()
@@ -481,7 +477,14 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            
+            for (int i = 0; i < 8; i++)
+            {
+                if (Input.GetKeyDown($"{i}"))
+                {
+                    accessoryIdx = i;
+                    this.TestAll();
+                }
+            }
         }
     }
 }
