@@ -1,19 +1,22 @@
-﻿using System.Collections;
+﻿using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    int TeamTurn = 0;
-    int EnemyTurn = 0;
-    [SerializeField] float AttackMoveDistance;
-    AxieManager axieManager;
-    Vector3 distance = new Vector3(3.1f,0,0);
+    public int TeamTurn = 0;
+    public int EnemyTurn = 0;
+    public int round=1;
+    public Transform[] Slot;
+    EnemyManager enemyManager;
+    public AxieStats[] axie;
+
 
     void Start()
     {
-        axieManager = GetComponent<AxieManager>();
+        enemyManager = GetComponent<EnemyManager>();
     }
 
     // Update is called once per frame
@@ -24,28 +27,77 @@ public class TurnManager : MonoBehaviour
     }
     public void UpdateTurn()
     {
+       
         if (TeamTurn == EnemyTurn)
         {
-           
+            
             TeamTurn++;
+            int j = 0;
+            for(int i = 0;i<enemyManager.ChimoraPlace.Length;i++)
+            {
+               
+                if (enemyManager.ChimoraPlace[i].GetComponentInChildren<EnemyStats>()!=null)
+                {
+                   
+                    
+                    if(j==EnemyTurn)
+                    {
+                        enemyManager.ChimoraPlace[j].GetComponentInChildren<EnemyStats>().myturn = true;
+                        enemyManager.ChimoraPlace[j].GetComponentInChildren<EnemyStats>().isatk = true;
+                        enemyManager.ChimoraPlace[j].GetComponentInChildren<EnemyStats>().idle= false;
+                        
+                        break;
+                        
+                    }
+                    j++;
+                }
+            }
 
         }
         else
         {
-            axieManager.Slot[TeamTurn+5].position -= new Vector3(3.1f, 0, 0);
-            EnemyTurn++;
-
-            if (EnemyTurn == 6)
+            
+            if (TeamTurn < 3) 
             {
-                TeamTurn = 0;
-                EnemyTurn = 0;
+                axie[TeamTurn].isatk = true;
+                axie[TeamTurn].idle = false;
+                axie[TeamTurn].myturn = true;
+                EnemyTurn++;
             }
+            else
+            {
+                EnemyTurn++;
+                Debug.Log(EnemyTurn);
+
+                if(EnemyTurn==6)
+                {
+                    TeamTurn = 0;
+                    EnemyTurn = 0;
+                    axie[TeamTurn].isatk = true;
+                    axie[TeamTurn].idle = false;
+                    axie[TeamTurn].myturn = true;
+                }
+                else UpdateTurn();
+
+            }
+            
+           
         }
     }
-    void AxieAnimation()
+    public void GetAxieTurn()
     {
-        
-        axieManager.Slot[TeamTurn].position = Vector3.Slerp(axieManager.Slot[TeamTurn].position, axieManager.Slot[TeamTurn].position + distance, 0.5f);
-
+        int j = 0;
+        for(int i=0;i<Slot.Length;i++)
+        {
+            if(Slot[i].GetComponentInChildren<AxieStats>()!=null)
+            {
+                axie[j] = Slot[i].GetComponentInChildren<AxieStats>();
+                j++;
+            }
+        }
+        axie[0].isatk = true;
+        axie[0].idle = false;
+        axie[0].myturn = true;
     }
 }
+   
