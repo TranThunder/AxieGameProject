@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8793814540692967188
+--- !u!1 &728535049025971084
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8793814540692967184}
-  - component: {fileID: 8793814540692967185}
-  - component: {fileID: 8793814540692967186}
-  - component: {fileID: 8793814540692967187}
-  - component: {fileID: 8719353391218472112}
+  - component: {fileID: 728535049025971088}
+  - component: {fileID: 728535049025971089}
+  - component: {fileID: 728535049025971090}
+  - component: {fileID: 728535049025971091}
+  - component: {fileID: 5925217154567386987}
   m_Layer: 0
-  m_Name: Spine GameObject (dryad-mage)
+  m_Name: Spine GameObject (dryad-fighter)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8793814540692967184
+--- !u!4 &728535049025971088
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8793814540692967188}
+  m_GameObject: {fileID: 728535049025971084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.98, y: 1.17, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8793814540692967185
+--- !u!33 &728535049025971089
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8793814540692967188}
+  m_GameObject: {fileID: 728535049025971084}
   m_Mesh: {fileID: 0}
---- !u!23 &8793814540692967186
+--- !u!23 &728535049025971090
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8793814540692967188}
+  m_GameObject: {fileID: 728535049025971084}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 00df9616d5fa14ca5af4cfef555cb74a, type: 2}
+  - {fileID: 2100000, guid: b26e75be71fdd493f8e870022321c5da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,19 +81,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8793814540692967187
+--- !u!114 &728535049025971091
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8793814540692967188}
+  m_GameObject: {fileID: 728535049025971084}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: fdcbef6d8f7034d0ebddc3e6483ea46e, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 746488e4088634ceabd3bca7e9fb5f89, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -118,13 +118,13 @@ MonoBehaviour:
   _animationName: action/idle/normal
   loop: 1
   timeScale: 1
---- !u!114 &8719353391218472112
+--- !u!114 &5925217154567386987
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8793814540692967188}
+  m_GameObject: {fileID: 728535049025971084}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9979b5b652f495c4bbfc6cc0dad2da37, type: 3}
@@ -134,4 +134,7 @@ MonoBehaviour:
   hp: 0
   atk: 0
   def: 0
+  isatk: 0
+  idle: 1
+  myturn: 0
   turnManager: {fileID: 0}

@@ -44,11 +44,12 @@ public class EnemyStats : MonoBehaviour
 
             transform.position = Vector2.Lerp(transform.position, pos - new Vector2(4.2f, 0), 4 * Time.deltaTime);
         }
-        if (isatk == false && idle == false)
+        if (isatk == false && myturn==true)
         {
-            if (skeanimation.AnimationName != "action/move-back")
+            if (skeanimation.AnimationName != "action/idle/normal")
             {
-                skeanimation.state.SetAnimation(0, "action/move-back", false);
+                skeanimation.state.SetAnimation(0, "action/idle/normal", true);
+                skeanimation.timeScale = 1.5f;
             }
             transform.position = Vector2.Lerp(transform.position, pos,4 * Time.deltaTime);
 
@@ -70,22 +71,25 @@ public class EnemyStats : MonoBehaviour
                 case "attack/melee/normal-attack":
                     {
                         isatk = false;
+                        idle = true;
                         break;
                     }
                 case "action/move-back":
                     {
                         idle = true;
-                        if (myturn)
-                        {
-                            turnManager.UpdateTurn();
-                            myturn = false;
-                        }
+                       
                         break;
 
                     }
                 case "action/idle/normal":
                     {
-                        
+                        if (myturn)
+                        {
+                            Debug.Log("oj");
+                            skeanimation.timeScale = 1;
+                            turnManager.UpdateTurn();
+                            myturn = false;
+                        }
                         break;
                     }
             }
